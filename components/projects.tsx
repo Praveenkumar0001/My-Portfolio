@@ -82,7 +82,7 @@ export function Projects() {
       description:
         "A food delivery platform with JWT-based authentication, dynamic menu, ordering system, and admin features for managing orders and menu items.",
       image: "/images/project1.png",
-      tags: ["React.js", "Node.js", "JWT", "Express.js", "MongoDB", "Nodemailer"],
+      tags: ["Javascript","React.js", "Node.js", "JWT", "Express.js", "MongoDB", "Nodemailer"],
       category: "Web",
       liveUrl: "https://food-delivery-web.example.com",
       githubUrl: "https://github.com/PraveenKumar0001/food-delivery-web",
@@ -133,7 +133,7 @@ const processOrder = async (req, res, next) => {
       description:
         "A full-stack e-commerce platform with secure user authentication, product management, and Stripe-based payment processing with a 98% success rate.",
       image: "/images/project2.png",
-      tags: ["Node.js", "Express", "Mongoose", "React", "Redux", "MongoDB"],
+      tags: ["Javascript","Node.js", "Express", "Mongoose", "React", "Redux", "MongoDB"],
       category: "Web",
       liveUrl: "https://mern-ecommerce.example.com",
       githubUrl: "https://github.com/PraveenKumar0001/my-mern-ecommerce-web",
@@ -207,7 +207,7 @@ const searchProducts = async (req, res) => {
       tags: ["Node.js", "HTML/CSS", "JavaScript", "MySQL"],
       category: "Web",
       liveUrl: "https://aksit-solutions.example.com",
-      githubUrl: "https://github.com/PraveenKumar0001/aksit-solutions",
+      githubUrl: "https://github.com/Praveenkumar0001/Aks-final-web.io",
       featured: false,
       longDescription: "This corporate website showcases the company's services, projects, and team with a modern, responsive design. Features include integrated payment processing for services, advanced contact forms with validation, and a dynamic projects portfolio. The site incorporates SEO best practices and performance optimization techniques.",
       achievements: ["25% improvement in user engagement", "40% increase in contact form submissions", "15% higher conversion rate for service inquiries"],
@@ -263,14 +263,14 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
 });`
     },
     {
-      title: "Fleet Management System",
+      title: "Event Management System",
       description:
         "Developed a comprehensive fleet management system with real-time tracking, maintenance scheduling, and fuel consumption analytics.",
-      image: "/images/project4.png",
-      tags: ["React", "Node.js", "MongoDB", "Google Maps API", "Socket.io"],
+      image: "/images/image.png",
+      tags: ["Javascript","React", "Node.js", "MongoDB", "Google Maps API", "Socket.io"],
       category: "Web",
       liveUrl: "https://fleet-management.example.com",
-      githubUrl: "https://github.com/PraveenKumar0001/fleet-management",
+      githubUrl: "https://github.com/Praveenkumar0001/EventSphere",
       featured: true,
       longDescription: "This fleet management solution provides real-time vehicle tracking, maintenance scheduling, driver management, and fuel consumption analytics. The system includes route optimization, automated maintenance alerts, and comprehensive reporting tools. The dashboard offers customizable views for different user roles.",
       achievements: ["Reduced fuel costs by 18%", "Improved maintenance compliance by 45%", "Decreased route planning time by 30%"],
@@ -332,14 +332,14 @@ io.on('connection', (socket) => {
 });`
     },
     {
-      title: "Mobile Fitness App",
+      title: "SocialSphere",
       description: 
         "A React Native fitness application with workout planning, progress tracking, nutrition monitoring, and social features.",
       image: "/images/project5.png",
-      tags: ["React Native", "Firebase", "Redux", "Expo", "Health Kit Integration"],
+      tags: ["React Native", "Firebase", "Redux", "Typescript","Next.js"],
       category: "Mobile",
       liveUrl: "https://fitness-app.example.com",
-      githubUrl: "https://github.com/PraveenKumar0001/mobile-fitness-app",
+      githubUrl: "https://github.com/Praveenkumar0001/SocialSphere",
       featured: false,
       longDescription: "This comprehensive fitness application allows users to create custom workout plans, track progress with detailed metrics, monitor nutrition, and connect with other fitness enthusiasts. Features include workout demonstrations, achievement badges, and integration with health tracking devices.",
       achievements: ["4.8/5 app store rating", "85% user retention after 3 months", "Featured in 'Best Fitness Apps 2024'"],
@@ -522,14 +522,14 @@ export const useHealthTracking = () => {
 };`
     },
     {
-      title: "RESTful API Service",
+      title: "Job Driver",
       description:
         "Built a scalable RESTful API service with advanced authentication, rate limiting, and comprehensive documentation.",
       image: "/images/project6.png",
-      tags: ["Node.js", "Express", "MongoDB", "JWT", "Swagger", "Docker"],
+      tags: ["Javascript","Node.js", "Express", "MongoDB", "JWT"],
       category: "Backend",
       liveUrl: "https://api-service.example.com",
-      githubUrl: "https://github.com/PraveenKumar0001/restful-api-service",
+      githubUrl: "https://github.com/Praveenkumar0001/JobDriver",
       featured: false,
       longDescription: "This robust API service features role-based access control, comprehensive authentication mechanisms, rate limiting, and detailed documentation. The architecture supports horizontal scaling and includes thorough testing. The API handles over 1 million requests daily with 99.9% uptime.",
       achievements: ["99.9% uptime", "60% reduction in response time", "Handles 1M+ daily requests"],
