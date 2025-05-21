@@ -43,8 +43,7 @@ export const metadata: Metadata = {
     description: "Full-Stack Developer specializing in MERN stack development",
     images: ["https://praveenkumar-portfolio.com/og-image.jpg"],
     creator: "@praveenkumar",
-  },
-    generator: 'v0.dev'
+  }
 }
 
 export default function RootLayout({

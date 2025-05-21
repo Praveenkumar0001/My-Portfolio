@@ -60,52 +60,66 @@ export function Hero() {
   ]
 
   // Custom cursor effect
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const { clientX, clientY } = e
-      setCursorPosition({ x: clientX, y: clientY })
+  // useEffect(() => {
+  //   const handleMouseMove = (e) => {
+  //     const { clientX, clientY } = e
+  //     setCursorPosition({ x: clientX, y: clientY })
       
-      // Calculate mouse position as percentage of viewport for parallax
+  //     // Calculate mouse position as percentage of viewport for parallax
+  //     const { innerWidth, innerHeight } = window
+  //     const x = (clientX / innerWidth) - 0.5
+  //     const y = (clientY / innerHeight) - 0.5
+      
+  //     setMousePosition({ x, y })
+  //   }
+    
+  //   "use client"
+
+useEffect(() => {
+  const handleMouseMove = (event: MouseEvent) => {
+    const { clientX, clientY } = event
+
+    if (typeof window !== "undefined") {
       const { innerWidth, innerHeight } = window
-      const x = (clientX / innerWidth) - 0.5
-      const y = (clientY / innerHeight) - 0.5
-      
+      const x = clientX / innerWidth - 0.5
+      const y = clientY / innerHeight - 0.5
+
       setMousePosition({ x, y })
     }
-    
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+  }
 
-  // Animate custom cursor
-  useEffect(() => {
-    if (cursorRef.current) {
-      cursorRef.current.style.transform = `translate(${cursorPosition.x}px, ${cursorPosition.y}px)`
+  if (typeof window !== "undefined") {
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }
+}, [])
+
+useEffect(() => {
+  if (cursorRef.current) {
+    cursorRef.current.style.transform = `translate(${cursorPosition.x}px, ${cursorPosition.y}px)`
+  }
+}, [cursorPosition])
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowExperienceBadge(true)
+  }, 2500)
+
+  return () => clearTimeout(timer)
+}, [])
+
+useEffect(() => {
+  const handleScroll = () => {
+    if (typeof window !== "undefined") {
+      setShowScrollIndicator(window.scrollY <= 200)
     }
-  }, [cursorPosition])
+  }
 
-  // Show experience badge with delayed animation
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowExperienceBadge(true)
-    }, 2500)
-    
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Scroll handler for indicators
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 200) {
-        setShowScrollIndicator(false)
-      } else {
-        setShowScrollIndicator(true)
-      }
-    }
-    
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  if (typeof window !== "undefined") {
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }
+}, [])
 
   // Cycle through tech stack highlights
   useEffect(() => {
@@ -387,19 +401,20 @@ export function Hero() {
         />
         
         {/* Interactive pulse element that follows cursor */}
-        <motion.div 
-          className="absolute w-[200px] h-[200px] rounded-full bg-primary/10 blur-3xl opacity-30"
-          animate={{ 
-            x: mousePosition.x * window.innerWidth,
-            y: mousePosition.y * window.innerHeight,
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ 
-            x: { duration: 0.8, ease: "easeOut" },
-            y: { duration: 0.8, ease: "easeOut" },
-            scale: { duration: 3, repeat: Infinity }
-          }}
-        />
+        {/* <motion.div 
+  className="absolute w-[200px] h-[200px] rounded-full bg-primary/10 blur-3xl opacity-30 pointer-events-none"
+  animate={{ 
+    x: mousePosition.x * screenWidth,  // Calculated beforehand
+    y: mousePosition.y * screenHeight,
+    scale: [1, 1.2, 1],
+  }}
+  transition={{ 
+    x: { duration: 0.8, ease: "easeOut" },
+    y: { duration: 0.8, ease: "easeOut" },
+    scale: { duration: 3, repeat: Infinity }
+  }}
+/> */}
+
         
         {/* Enhanced decorative elements with pulse effect */}
         <motion.div 
@@ -821,7 +836,7 @@ export function Hero() {
                   </motion.div>
                 )}
               </motion.div>
-              <motion.div
+              {/* <motion.div
               className="absolute -right-4 top-1/3 bg-gray-900 shadow-lg px-4 py-2 rounded-xl border border-gray-800"
               initial={{ x: 100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -831,7 +846,7 @@ export function Hero() {
                 <span className="text-xl font-bold text-primary">2+</span>
                 <p className="text-xs text-gray-400">Years Experience</p>
               </div>
-            </motion.div>
+            </motion.div> */}
               {/* Profile image section with 3D parallax effect */}
               <motion.div 
                 className="relative flex justify-center"
@@ -974,6 +989,17 @@ export function Hero() {
                   <Calendar className="w-4 h-4 text-primary" />
                   <span>Since <span className="text-primary">2022</span></span>
                 </motion.div>
+                <motion.div
+              className="absolute -right-4 top-1/3 bg-gray-900 shadow-lg px-4 py-2 rounded-xl border border-gray-800"
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 1.6, duration: 0.5 }}
+            >
+              <div className="text-center">
+                <span className="text-xl font-bold text-primary">3+</span>
+                <p className="text-xs text-gray-400">Years Experience</p>
+              </div>
+            </motion.div>
               </motion.div>
             </div>
           </div>
