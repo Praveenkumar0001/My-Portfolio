@@ -45,9 +45,9 @@ const Button = ({ children, variant = "default", size = "default", className = "
   );
 };
 
-// Mock theme hook
+// Mock theme hook with proper dark mode handling
 const useTheme = () => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   return { theme, setTheme };
 };
 
@@ -334,23 +334,25 @@ export function Header() {
         headerVisible ? "top-0" : "-top-20"
       } ${
         scrolled
-          ? "bg-gradient-to-r from-gray-900/95 via-gray-900/98 to-gray-900/95 border-b shadow-lg py-2"
-          : "bg-gray-900/50 backdrop-blur-md py-4"
+          ? `${theme === 'dark' ? 'bg-gradient-to-r from-gray-900/95 via-gray-900/98 to-gray-900/95' : 'bg-gradient-to-r from-white/95 via-white/98 to-white/95'} border-b shadow-lg py-2`
+          : `${theme === 'dark' ? 'bg-gray-900/50' : 'bg-white/50'} backdrop-blur-md py-4`
       } ${animateSticky ? "sticky-reveal" : ""} ${isPinned ? "shadow-lg border-purple-500/30" : ""}`}
     >
-      {/* Scroll Progress Indicator - linear gradient that smoothly transitions colors */}
+      {/* Scroll Progress Indicator - wider with enhanced gradient */}
       <div
-        className="absolute bottom-0 left-4 right-4 h-1 bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-500 rounded-full"
-        style={{ width: `calc(${scrollProgress}% - 2rem)`, left: "1rem" }}
+        className="absolute bottom-0 h-2.5 bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-500 rounded-full"
+        style={{ width: `${scrollProgress}%`, left: "0.5rem", right: "0.5rem", maxWidth: `calc(${scrollProgress}% - 1rem)` }}
       ></div>
 
-      {/* Glow effect for scroll progress */}
+      {/* Enhanced Glow effect for scroll progress */}
       <div
-        className="absolute bottom-0 left-4 right-4 h-2 bg-gradient-to-r from-purple-500/50 via-purple-600/50 to-indigo-500/50 blur-sm rounded-full"
+        className="absolute bottom-0 h-3 bg-gradient-to-r from-purple-500/50 via-purple-600/50 to-indigo-500/50 blur-sm rounded-full"
         style={{
-          width: `calc(${scrollProgress}% - 2rem)`,
-          left: "1rem",
-          opacity: scrolled ? 0.6 : 0.3,
+          width: `${scrollProgress}%`,
+          left: "0.5rem",
+          right: "0.5rem",
+          maxWidth: `calc(${scrollProgress}% - 1rem)`,
+          opacity: scrolled ? 0.8 : 0.5,
         }}
       ></div>
 
@@ -383,7 +385,7 @@ export function Header() {
                 {"Praveen Kumar".split("").map((letter, index) => (
                   <span
                     key={index}
-                    className={`inline-block transition-transform duration-200 hover:scale-110 ${letter === " " ? "w-2" : ""} text-white`}
+                    className={`inline-block transition-transform duration-200 hover:scale-110 ${letter === " " ? "w-2" : ""} ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
                     style={{ animationDelay: `${index * 40}ms` }}
                   >
                     {letter}
@@ -397,17 +399,12 @@ export function Header() {
           </div>
         </Link>
 
-        {/* Desktop navigation - moved to right side */}
-        <nav className="hidden md:flex gap-2 items-center">
-          {/* Current active section indicator (tablet and above) */}
-          <div className="hidden sm:flex items-center text-sm font-medium text-purple-400/80 mr-4">
-            <span className="font-bold text-purple-400">{getActiveSectionTitle()}</span>
-          </div>
-
-          {/* Main Navigation Pills */}
+        {/* Centered navigation container */}
+        <div className="hidden md:flex flex-1 justify-center items-center max-w-4xl mx-8">
+          {/* Main Navigation Pills - centered */}
           <div
             ref={navRef}
-            className="relative bg-gray-900/80 backdrop-blur-md rounded-full border border-purple-500/10 shadow-lg px-2 py-1 flex items-center overflow-x-auto hide-scrollbar"
+            className={`relative ${theme === 'dark' ? 'bg-gray-900/80' : 'bg-white/80'} backdrop-blur-md rounded-full border ${theme === 'dark' ? 'border-purple-500/10' : 'border-purple-500/20'} shadow-lg px-2 py-1 flex items-center overflow-x-auto hide-scrollbar`}
           >
             {/* Running highlight effect that shows the active section */}
             <div
@@ -434,11 +431,13 @@ export function Header() {
                     onMouseEnter={() => setHoveredSection(link.href)}
                     onMouseLeave={() => setHoveredSection(null)}
                     className={`px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-300 flex items-center gap-2 nav-pill group ${
-                      isActive ? "text-white bg-gradient-to-r from-purple-600 to-purple-600 shadow-md" : "hover:text-purple-400 hover:bg-purple-600/5 text-gray-300"
+                      isActive 
+                        ? "text-white bg-gradient-to-r from-purple-600 to-purple-600 shadow-md" 
+                        : `hover:text-purple-400 hover:bg-purple-600/5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`
                     }`}
                     aria-current={isActive ? "page" : undefined}
                   >
-                    <Icon className={`h-4 w-4 transition-transform duration-300 nav-icon ${isActive ? "text-white" : "text-gray-400"}`} />
+                    <Icon className={`h-4 w-4 transition-transform duration-300 nav-icon ${isActive ? "text-white" : theme === 'dark' ? "text-gray-400" : "text-gray-500"}`} />
                     <span>{link.label}</span>
 
                     {/* Progress indicator */}
@@ -455,7 +454,7 @@ export function Header() {
 
                   {/* Tooltip on hover */}
                   {hoveredSection === link.href && !isActive && (
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 rounded-md bg-gray-900/90 backdrop-blur-sm border border-purple-500/10 shadow-lg text-xs whitespace-nowrap text-white">
+                    <div className={`absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 rounded-md ${theme === 'dark' ? 'bg-gray-900/90' : 'bg-white/90'} backdrop-blur-sm border ${theme === 'dark' ? 'border-purple-500/10' : 'border-purple-500/20'} shadow-lg text-xs whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                       Go to {link.label}
                     </div>
                   )}
@@ -463,69 +462,80 @@ export function Header() {
               );
             })}
           </div>
+        </div>
 
-          {/* Control buttons group - after navigation */}
-          <div className="flex items-center gap-2 ml-4">
-            {/* Pin Button */}
+        {/* Control buttons group - moved to far right */}
+        <div className="hidden md:flex items-center gap-2">
+          {/* Current active section indicator */}
+          <div className={`flex items-center text-sm font-medium ${theme === 'dark' ? 'text-purple-400/80' : 'text-purple-600/80'} mr-4`}>
+            <span className={`font-bold ${theme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`}>{getActiveSectionTitle()}</span>
+          </div>
+
+          {/* Pin Button */}
+          <div className="relative group">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={togglePin}
+              aria-label={isPinned ? "Unpin header" : "Pin header"}
+              aria-pressed={isPinned}
+              className={`rounded-full border overflow-hidden ${
+                isPinned 
+                  ? "bg-purple-600 text-white shadow-lg" 
+                  : `${theme === 'dark' ? 'bg-gray-900 text-gray-300 hover:bg-purple-600/10 border-purple-500/20' : 'bg-white text-gray-600 hover:bg-purple-600/10 border-purple-500/30'}`
+              }`}
+            >
+              <Pin className={`h-4 w-4 ${isPinned ? "fill-current" : ""}`} />
+              <span className={`absolute -inset-1 rounded-full opacity-0 blur group-hover:opacity-30 transition-all duration-300 ${isPinned ? "bg-purple-600" : "bg-purple-600/30"}`}></span>
+            </Button>
+
+            <div className={`absolute top-full right-0 mt-2 px-2 py-1 rounded-md ${theme === 'dark' ? 'bg-gray-900/90' : 'bg-white/90'} backdrop-blur-sm border ${theme === 'dark' ? 'border-purple-500/10' : 'border-purple-500/20'} shadow-lg text-xs whitespace-nowrap opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+              {isPinned ? "Unpin header" : "Pin header to top"}
+            </div>
+          </div>
+
+          {/* Theme Toggle Button - Enhanced */}
+          {mounted && (
             <div className="relative group">
               <Button
                 variant="outline"
                 size="icon"
-                onClick={togglePin}
-                aria-label={isPinned ? "Unpin header" : "Pin header"}
-                aria-pressed={isPinned}
-                className={`rounded-full border overflow-hidden ${isPinned ? "bg-purple-600 text-white shadow-lg" : "bg-gray-900 text-gray-300 hover:bg-purple-600/10 border-purple-500/20"}`}
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                className={`rounded-full shadow-lg border overflow-hidden transition-all duration-300 ${
+                  theme === "dark" 
+                    ? "bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700 hover:from-slate-800 hover:to-slate-700" 
+                    : "bg-gradient-to-br from-amber-50 to-yellow-100 border-yellow-200 hover:from-amber-100 hover:to-yellow-200"
+                }`}
               >
-                <Pin className={`h-4 w-4 ${isPinned ? "fill-current" : ""}`} />
-                <span className={`absolute -inset-1 rounded-full opacity-0 blur group-hover:opacity-30 transition-all duration-300 ${isPinned ? "bg-purple-600" : "bg-purple-600/30"}`}></span>
+                {theme === "dark" ? (
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(white,_transparent_60%)] opacity-10"></div>
+                    <div className="absolute top-1 right-1 w-1 h-1 rounded-full bg-white/70"></div>
+                    <div className="absolute top-2 left-2 w-0.5 h-0.5 rounded-full bg-white/60"></div>
+                    <div className="absolute bottom-1 left-2 w-0.5 h-0.5 rounded-full bg-white/60"></div>
+                  </div>
+                ) : (
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 to-yellow-300 opacity-40"></div>
+                  </div>
+                )}
+
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5 text-yellow-400 relative z-10 group-hover:rotate-45 transition-transform duration-500" />
+                ) : (
+                  <Moon className="h-5 w-5 text-slate-700 relative z-10 group-hover:-rotate-45 transition-transform duration-500" />
+                )}
+
+                <span className={`absolute -inset-1 rounded-full opacity-0 blur group-hover:opacity-60 transition-all duration-300 ${theme === "dark" ? "bg-yellow-400/30" : "bg-slate-700/20"}`}></span>
               </Button>
 
-              <div className="absolute top-full right-0 mt-2 px-2 py-1 rounded-md bg-gray-900/90 backdrop-blur-sm border border-purple-500/10 shadow-lg text-xs whitespace-nowrap opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 text-white">
-                {isPinned ? "Unpin header" : "Pin header to top"}
+              <div className={`absolute top-full right-0 mt-2 px-2 py-1 rounded-md ${theme === 'dark' ? 'bg-gray-900/90' : 'bg-white/90'} backdrop-blur-sm border ${theme === 'dark' ? 'border-purple-500/10' : 'border-purple-500/20'} shadow-lg text-xs whitespace-nowrap opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                Switch to {theme === "dark" ? "light" : "dark"} mode
               </div>
             </div>
-
-            {/* Theme Toggle Button */}
-            {mounted && (
-              <div className="relative group">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-                  className={`rounded-full shadow-lg border overflow-hidden ${
-                    theme === "dark" ? "bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700" : "bg-gradient-to-br from-amber-50 to-yellow-100 border-yellow-200"
-                  }`}
-                >
-                  {theme === "dark" ? (
-                    <div className="absolute inset-0 overflow-hidden">
-                      <div className="absolute inset-0 bg-[radial-gradient(white,_transparent_60%)] opacity-10"></div>
-                      <div className="absolute top-1 right-1 w-1 h-1 rounded-full bg-white/70"></div>
-                      <div className="absolute top-2 left-2 w-0.5 h-0.5 rounded-full bg-white/60"></div>
-                      <div className="absolute bottom-1 left-2 w-0.5 h-0.5 rounded-full bg-white/60"></div>
-                    </div>
-                  ) : (
-                    <div className="absolute inset-0 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 to-yellow-300 opacity-40"></div>
-                    </div>
-                  )}
-
-                  {theme === "dark" ? (
-                    <Sun className="h-5 w-5 text-yellow-400 relative z-10 group-hover:rotate-45 transition-transform duration-500" />
-                  ) : (
-                    <Moon className="h-5 w-5 text-slate-700 relative z-10 group-hover:-rotate-45 transition-transform duration-500" />
-                  )}
-
-                  <span className={`absolute -inset-1 rounded-full opacity-0 blur group-hover:opacity-60 transition-all duration-300 ${theme === "dark" ? "bg-yellow-400/30" : "bg-slate-700/20"}`}></span>
-                </Button>
-
-                <div className="absolute top-full right-0 mt-2 px-2 py-1 rounded-md bg-gray-900/90 backdrop-blur-sm border border-purple-500/10 shadow-lg text-xs whitespace-nowrap opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 text-white">
-                  Switch to {theme === "dark" ? "light" : "dark"} mode
-                </div>
-              </div>
-            )}
-          </div>
-        </nav>
+          )}
+        </div>
 
         {/* Section indicators with active animation - moved to bottom right */}
         <div className="hidden lg:flex absolute -bottom-1 right-6 gap-1 opacity-70">
@@ -534,7 +544,7 @@ export function Header() {
             return (
               <div
                 key={`dot-${link.href}`}
-                className={`h-1 rounded-full transition-all duration-500 cursor-pointer ${isActive ? "bg-gradient-to-r from-purple-600 to-purple-600 w-6" : "bg-gray-400/30 hover:bg-gray-400/50 w-2"}`}
+                className={`h-1 rounded-full transition-all duration-500 cursor-pointer ${isActive ? "bg-gradient-to-r from-purple-600 to-purple-600 w-6" : `${theme === 'dark' ? 'bg-gray-400/30 hover:bg-gray-400/50' : 'bg-gray-500/30 hover:bg-gray-500/50'} w-2`}`}
                 onClick={() => handleNavClick(link.href)}
                 aria-label={`Go to ${link.label} section`}
               ></div>
@@ -549,7 +559,7 @@ export function Header() {
             variant={isPinned ? "default" : "ghost"}
             size="icon"
             onClick={togglePin}
-            className={`relative overflow-hidden rounded-full border ${isPinned ? "bg-purple-600 text-white" : "border-purple-500/20 text-gray-300"} shadow-md`}
+            className={`relative overflow-hidden rounded-full border ${isPinned ? "bg-purple-600 text-white" : `border-purple-500/20 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} shadow-md`}
             aria-pressed={isPinned}
             aria-label={isPinned ? "Unpin header" : "Pin header"}
           >
@@ -576,7 +586,7 @@ export function Header() {
         <div
           id="mobile-menu"
           ref={mobileNavRef}
-          className={`absolute top-full left-4 right-4 md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-gray-900/95 backdrop-blur-lg border-b border-purple-500/10 shadow-2xl z-50 rounded-b-2xl ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          className={`absolute top-full left-4 right-4 md:hidden overflow-hidden transition-all duration-300 ease-in-out ${theme === 'dark' ? 'bg-gray-900/95' : 'bg-white/95'} backdrop-blur-lg border-b ${theme === 'dark' ? 'border-purple-500/10' : 'border-purple-500/20'} shadow-2xl z-50 rounded-b-2xl ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
           style={{ maxHeight: isMenuOpen ? `${mobileNavHeight}px` : "0px" }}
           aria-hidden={!isMenuOpen}
         >
@@ -587,18 +597,18 @@ export function Header() {
                 <ChevronRight className="h-5 w-5 text-purple-400" />
               </div>
               <div>
-                <div className="text-xs text-gray-400">Current section</div>
+                <div className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Current section</div>
                 <div className="font-bold text-purple-400">{getActiveSectionTitle()}</div>
               </div>
             </div>
 
             {/* Animated progress indicator for mobile */}
-            <div className="mx-2 mb-3 h-1.5 bg-gray-200/20 rounded-full overflow-hidden">
+            <div className={`mx-2 mb-3 h-1.5 ${theme === 'dark' ? 'bg-gray-200/20' : 'bg-gray-300/30'} rounded-full overflow-hidden`}>
               <div className="h-full bg-gradient-to-r from-purple-600 via-purple-600 to-indigo-500 rounded-full relative" style={{ width: `${scrollProgress}%` }}>
                 {/* Animated shine effect */}
                 <div className="absolute inset-0 w-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-[marquee_2s_linear_infinite]"></div>
               </div>
-              <div className="mt-1 text-xs text-gray-400 text-right">Overall progress: {Math.round(scrollProgress)}%</div>
+              <div className={`mt-1 text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} text-right`}>Overall progress: {Math.round(scrollProgress)}%</div>
             </div>
 
             <nav className="flex flex-col gap-2">
@@ -620,14 +630,22 @@ export function Header() {
                         e.preventDefault();
                         handleNavClick(link.href);
                       }}
-                      className={`p-3 text-sm font-medium flex items-center justify-between rounded-xl transition-all duration-300 relative ${isActive ? "bg-gradient-to-r from-purple-600/90 to-purple-600/90 text-white shadow-md" : "hover:bg-purple-600/10 text-gray-300"}`}
+                      className={`p-3 text-sm font-medium flex items-center justify-between rounded-xl transition-all duration-300 relative ${
+                        isActive 
+                          ? "bg-gradient-to-r from-purple-600/90 to-purple-600/90 text-white shadow-md" 
+                          : `hover:bg-purple-600/10 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`
+                      }`}
                       aria-current={isActive ? "page" : undefined}
                     >
                       {/* Left highlight bar */}
                       <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl bg-gradient-to-b from-purple-600 via-purple-600 to-indigo-500" style={{ height: isActive ? "100%" : "0%", opacity: isActive ? 1 : 0, transition: "all 0.5s ease" }}></div>
 
                       <div className="flex items-center">
-                        <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-3 transition-all duration-300 ${isActive ? "bg-white text-purple-600 shadow-md" : "bg-purple-600/10 text-gray-300"}`}>
+                        <div className={`h-8 w-8 rounded-full flex items-center justify-center mr-3 transition-all duration-300 ${
+                          isActive 
+                            ? "bg-white text-purple-600 shadow-md" 
+                            : `bg-purple-600/10 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`
+                        }`}>
                           <Icon className="h-4 w-4" />
                         </div>
                         <span className="font-medium">{link.label}</span>
@@ -644,20 +662,42 @@ export function Header() {
             </nav>
 
             {/* Mobile controls section */}
-            <div className="mt-3 border-t border-gray-600/50 pt-3 space-y-2">
+            <div className={`mt-3 border-t ${theme === 'dark' ? 'border-gray-600/50' : 'border-gray-300/50'} pt-3 space-y-2`}>
               {/* Pin header button */}
-              <Button variant={isPinned ? "default" : "ghost"} onClick={togglePin} className={`w-full justify-between gap-2 rounded-xl py-3 overflow-hidden relative ${isPinned ? "bg-purple-600 text-white" : "bg-purple-600/5 hover:bg-purple-600/10 text-gray-300"}`}>
+              <Button 
+                variant={isPinned ? "default" : "ghost"} 
+                onClick={togglePin} 
+                className={`w-full justify-between gap-2 rounded-xl py-3 overflow-hidden relative ${
+                  isPinned 
+                    ? "bg-purple-600 text-white" 
+                    : `bg-purple-600/5 hover:bg-purple-600/10 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`
+                }`}
+              >
                 <span className="flex items-center relative z-10">
                   <Pin className={`h-5 w-5 mr-2 ${isPinned ? "fill-current" : ""}`} />
                   {isPinned ? "Header Pinned to Top" : "Pin Header to Top"}
                 </span>
 
-                <span className={`px-2 py-0.5 rounded-full text-xs ${isPinned ? "bg-white/20 text-white" : "bg-purple-600/10 text-purple-400"}`}>{isPinned ? "ON" : "OFF"}</span>
+                <span className={`px-2 py-0.5 rounded-full text-xs ${
+                  isPinned 
+                    ? "bg-white/20 text-white" 
+                    : `bg-purple-600/10 text-purple-400`
+                }`}>
+                  {isPinned ? "ON" : "OFF"}
+                </span>
               </Button>
 
               {/* Theme toggle in mobile menu */}
               {mounted && (
-                <Button variant="ghost" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className={`w-full justify-between gap-2 rounded-xl py-3 overflow-hidden relative ${theme === "dark" ? "bg-gradient-to-r from-slate-800 to-slate-900 text-yellow-400 hover:from-slate-700" : "bg-gradient-to-r from-amber-50 to-yellow-100 text-slate-800 hover:from-amber-100"}`}>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")} 
+                  className={`w-full justify-between gap-2 rounded-xl py-3 overflow-hidden relative ${
+                    theme === "dark" 
+                      ? "bg-gradient-to-r from-slate-800 to-slate-900 text-yellow-400 hover:from-slate-700" 
+                      : "bg-gradient-to-r from-amber-50 to-yellow-100 text-slate-800 hover:from-amber-100"
+                  }`}
+                >
                   {/* Animated background elements */}
                   {theme === "dark" ? (
                     <div className="absolute inset-0 overflow-hidden opacity-70">
@@ -676,7 +716,11 @@ export function Header() {
                     {theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
                   </span>
 
-                  <span className={`px-2 py-0.5 rounded-full text-xs ${theme === "dark" ? "bg-yellow-400/20" : "bg-slate-700/10"}`}>{theme === "dark" ? "DARK" : "LIGHT"}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-xs ${
+                    theme === "dark" ? "bg-yellow-400/20" : "bg-slate-700/10"
+                  }`}>
+                    {theme === "dark" ? "DARK" : "LIGHT"}
+                  </span>
                 </Button>
               )}
             </div>
