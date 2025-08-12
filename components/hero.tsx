@@ -755,7 +755,7 @@ export function Hero() {
                 className="group"
                 asChild
               >
-                <Link href="/IIT_Dhanbad_New.pdf" download>
+                <Link href="/IIT_Dhanbad-N.pdf" download>
                   <motion.div
                     whileHover={{ 
                       scale: 1.2,
@@ -779,8 +779,8 @@ export function Hero() {
               {[
                 { icon: <Github className="h-5 w-5" />, href: "https://github.com/Praveenkumar0001", label: "GitHub" },
                 { icon: <Linkedin className="h-5 w-5" />, href: "https://www.linkedin.com/in/praveen-kumar-803838261/", label: "LinkedIn" },
-                { icon: <Mail className="h-5 w-5" />, href: "mailto:22je0728@iitism.ac.in", label: "Email" },
-                { icon: <Globe className="h-5 w-5" />, href: "https://my-portfolio-5c2s.vercel.app/", label: "Website" }
+                { icon: <Mail className="h-5 w-5" />, href: "mailto:praveenkumar01.iitism@gmail.com", label: "Email" },
+                { icon: <Globe className="h-5 w-5" />, href: "https://praveen-kumar.live/", label: "Website" }
               ].map((social, i) => (
                 <motion.a
                   key={social.label}
