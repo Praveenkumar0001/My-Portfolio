@@ -308,7 +308,7 @@ export function Skills() {
         ></motion.div>
       </div>
       
-      <div className="container px-4 md:px-6 relative z-10">
+      <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 relative z-10 max-w-7xl">
         <motion.div
           ref={ref}
           initial="hidden"
@@ -331,7 +331,7 @@ export function Skills() {
               Technical Expertise
             </motion.h2>
             <motion.p 
-              className="mx-auto max-w-[800px] text-muted-foreground md:text-xl/relaxed"
+              className="mx-auto max-w-[800px] text-muted-foreground md:text-xl/relaxed px-4"
               variants={itemVariants}
             >
               Technologies and tools I've mastered to build exceptional digital experiences
@@ -352,7 +352,7 @@ export function Skills() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="mb-6 p-3 bg-primary/10 rounded-lg text-sm flex items-center justify-center space-x-2 border border-primary/20"
+                className="mb-6 mx-4 p-3 bg-primary/10 rounded-lg text-sm flex items-center justify-center space-x-2 border border-primary/20"
               >
                 <Info className="h-4 w-4 text-primary" />
                 <span>Click on any skill to see more details or hover for quick info!</span>
@@ -366,7 +366,7 @@ export function Skills() {
             className="w-full"
           >
             <motion.div 
-              className="relative rounded-xl p-1 bg-muted/70 backdrop-blur-sm mb-8"
+              className="relative rounded-xl p-1 bg-muted/70 backdrop-blur-sm mb-8 mx-4"
               whileHover={{ boxShadow: "0 8px 30px rgba(0, 0, 0, 0.15)" }}
               transition={{ duration: 0.3 }}
               onHoverStart={() => setIsHoveringOverTabs(true)}
@@ -405,7 +405,7 @@ export function Skills() {
             
             <AnimatePresence mode="wait">
               {skillCategories.map((category) => (
-                <TabsContent key={category.title} value={category.title} className="outline-none ring-0">
+                <TabsContent key={category.title} value={category.title} className="outline-none ring-0 mx-4">
                   <motion.div
                     key={category.title}
                     initial={{ opacity: 0, y: 20 }}

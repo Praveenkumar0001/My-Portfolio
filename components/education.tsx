@@ -101,7 +101,7 @@ export  function Education() {
 
   return (
     <section id="education" className="py-16 md:py-24 bg-gradient-to-b from-background to-slate-50 dark:to-slate-900/50">
-      <div className="container px-4 md:px-6">
+      <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 max-w-7xl">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -114,7 +114,7 @@ export  function Education() {
               Education Journey
             </div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Academic Background</h2>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed">
+            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed px-4">
               My educational journey and academic achievements
             </p>
           </motion.div>
@@ -158,7 +158,7 @@ export  function Education() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="mx-auto max-w-3xl py-12"
+              className="mx-auto max-w-4xl py-12 px-4"
             >
               <Card className="overflow-hidden border-2 border-primary/10 hover:border-primary/30 transition-all duration-300 shadow-lg hover:shadow-xl">
                 <CardHeader className="flex flex-row items-start gap-4 bg-gradient-to-r from-primary/5 to-blue-500/5">
@@ -241,7 +241,7 @@ export  function Education() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="mx-auto max-w-3xl py-12"
+              className="mx-auto max-w-4xl py-12 px-4"
             >
               <Card className="overflow-hidden border-2 border-primary/10 hover:border-primary/30 transition-all duration-300 shadow-lg hover:shadow-xl">
                 <CardHeader className="flex flex-row items-start gap-4 bg-gradient-to-r from-primary/5 to-blue-500/5">
@@ -338,7 +338,7 @@ export  function Education() {
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95, y: 20 }}
                           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl bg-white dark:bg-slate-900 rounded-xl shadow-2xl z-50 p-6 overflow-hidden"
+                          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl mx-4 bg-white dark:bg-slate-900 rounded-xl shadow-2xl z-50 p-6 overflow-hidden"
                         >
                           <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center gap-2">

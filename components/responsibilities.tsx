@@ -178,13 +178,13 @@ export function Responsibilities() {
 
   return (
     <section id="responsibilities" className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/70">
-      <div className="container px-4 md:px-6">
+      <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 max-w-7xl">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={controls}
           variants={containerVariants}
-          className="flex flex-col items-center justify-center space-y-6 text-center"
+          className="flex flex-col items-center justify-center space-y-6 text-center mb-12"
         >
           <motion.div variants={titleVariants} className="space-y-3">
             <div className="inline-flex items-center justify-center rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary ring-1 ring-inset ring-primary/30 mb-4">
@@ -204,7 +204,7 @@ export function Responsibilities() {
           variants={containerVariants}
           initial="hidden"
           animate={controls}
-          className="mx-auto max-w-5xl py-12"
+          className="mx-auto max-w-6xl"
         >
           <Tabs 
             defaultValue="leadership" 
@@ -213,7 +213,7 @@ export function Responsibilities() {
             className="w-full"
           >
             <div className="flex justify-center mb-8">
-              <TabsList className="grid grid-cols-2 w-full max-w-md">
+              <TabsList className="grid grid-cols-2 w-full max-w-md mx-4">
                 <TabsTrigger 
                   value="leadership"
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full transition-all duration-300"
@@ -231,7 +231,7 @@ export function Responsibilities() {
               </TabsList>
             </div>
 
-            <TabsContent value="leadership" className="mt-0">
+            <TabsContent value="leadership" className="mt-0 px-4 sm:px-0">
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -247,6 +247,7 @@ export function Responsibilities() {
                     animate="visible"
                     custom={index}
                     transition={{ delay: index * 0.1 }}
+                    className="mx-2 sm:mx-0"
                   >
                     <Card className="overflow-hidden border-muted-foreground/10 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
                       <CardHeader className="flex flex-row items-center gap-4 pb-2">
@@ -333,7 +334,7 @@ export function Responsibilities() {
               </motion.div>
             </TabsContent>
 
-            <TabsContent value="achievements" className="mt-0">
+            <TabsContent value="achievements" className="mt-0 px-4 sm:px-0">
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -349,6 +350,7 @@ export function Responsibilities() {
                     animate="visible"
                     custom={index}
                     transition={{ delay: index * 0.1 }}
+                    className="mx-2 sm:mx-0"
                   >
                     <Card className="h-full flex flex-col border-muted-foreground/10 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
                       <CardHeader className="flex flex-row items-start gap-4 pb-2">

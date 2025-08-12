@@ -55,70 +55,56 @@ export function Hero() {
     "MERN Stack Expert",
     "Entrepreneurial Enthusiast",
     "Problem Solver",
-    "Creative Coder" // Added new role
+    "Creative Coder"
   ]
 
-  // Custom cursor effect
-  // useEffect(() => {
-  //   const handleMouseMove = (e) => {
-  //     const { clientX, clientY } = e
-  //     setCursorPosition({ x: clientX, y: clientY })
-      
-  //     // Calculate mouse position as percentage of viewport for parallax
-  //     const { innerWidth, innerHeight } = window
-  //     const x = (clientX / innerWidth) - 0.5
-  //     const y = (clientY / innerHeight) - 0.5
-      
-  //     setMousePosition({ x, y })
-  //   }
-    
-  //   "use client"
+  // Mouse move effects
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      const { clientX, clientY } = event
 
-useEffect(() => {
-  const handleMouseMove = (event: MouseEvent) => {
-    const { clientX, clientY } = event
+      if (typeof window !== "undefined") {
+        const { innerWidth, innerHeight } = window
+        const x = clientX / innerWidth - 0.5
+        const y = clientY / innerHeight - 0.5
+
+        setMousePosition({ x, y })
+        setCursorPosition({ x: clientX, y: clientY })
+      }
+    }
 
     if (typeof window !== "undefined") {
-      const { innerWidth, innerHeight } = window
-      const x = clientX / innerWidth - 0.5
-      const y = clientY / innerHeight - 0.5
-
-      setMousePosition({ x, y })
+      window.addEventListener("mousemove", handleMouseMove)
+      return () => window.removeEventListener("mousemove", handleMouseMove)
     }
-  }
+  }, [])
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }
-}, [])
+  useEffect(() => {
+    if (cursorRef.current) {
+      cursorRef.current.style.transform = `translate(${cursorPosition.x}px, ${cursorPosition.y}px)`
+    }
+  }, [cursorPosition])
 
-useEffect(() => {
-  if (cursorRef.current) {
-    cursorRef.current.style.transform = `translate(${cursorPosition.x}px, ${cursorPosition.y}px)`
-  }
-}, [cursorPosition])
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowExperienceBadge(true)
+    }, 2500)
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setShowExperienceBadge(true)
-  }, 2500)
+    return () => clearTimeout(timer)
+  }, [])
 
-  return () => clearTimeout(timer)
-}, [])
+  useEffect(() => {
+    const handleScroll = () => {
+      if (typeof window !== "undefined") {
+        setShowScrollIndicator(window.scrollY <= 200)
+      }
+    }
 
-useEffect(() => {
-  const handleScroll = () => {
     if (typeof window !== "undefined") {
-      setShowScrollIndicator(window.scrollY <= 200)
+      window.addEventListener("scroll", handleScroll)
+      return () => window.removeEventListener("scroll", handleScroll)
     }
-  }
-
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }
-}, [])
+  }, [])
 
   // Cycle through tech stack highlights
   useEffect(() => {
@@ -146,7 +132,7 @@ useEffect(() => {
   // Tilt transformations with enhanced responsiveness
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  const tiltX = useTransform(mouseY, (y) => y * 25) // Increased tilt effect
+  const tiltX = useTransform(mouseY, (y) => y * 25)
   const tiltY = useTransform(mouseX, (x) => -x * 25)
   const glowX = useTransform(mouseX, (x) => x * 50)
   const glowY = useTransform(mouseY, (y) => y * 50)
@@ -163,7 +149,7 @@ useEffect(() => {
     return () => clearInterval(roleInterval)
   }, [controls, roles.length])
 
-  // Typing completion effect with enhanced timing
+  // Typing completion effect
   useEffect(() => {
     if (isVisible) {
       setTimeout(() => {
@@ -172,14 +158,13 @@ useEffect(() => {
     }
   }, [isVisible])
 
-  // Enhanced typing animation with variable speed and natural effect
+  // Enhanced typing animation
   const nameText = "Praveen Kumar"
   const [displayedName, setDisplayedName] = useState("")
 
   useEffect(() => {
     if (isVisible) {
       let currentIndex = 0
-      // More variable typing speed for natural effect
       const typingDelay = [...nameText].map(() => 40 + Math.random() * 120)
       
       const typeNextChar = () => {
@@ -187,19 +172,17 @@ useEffect(() => {
           setDisplayedName(nameText.substring(0, currentIndex))
           currentIndex++
           
-          // Add occasional pause for more natural typing
           const pause = currentIndex % 4 === 0 ? 180 : 0
           const delay = typingDelay[currentIndex - 1] || 50 + pause
           setTimeout(typeNextChar, delay)
         }
       }
       
-      // Begin typing with initial delay
       setTimeout(typeNextChar, 500)
     }
   }, [isVisible])
 
-  // Animation variants with improved spring physics and smoothness
+  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -240,7 +223,7 @@ useEffect(() => {
     }
   }
 
-  // Enhanced tech stack with more detailed information and icons
+  // Enhanced tech stack
   const techStack = [
     { name: "React", color: "bg-blue-500", icon: "⚛️", years: 2, description: "Building interactive UIs" },
     { name: "Node.js", color: "bg-green-500", icon: "🟢", years: 2, description: "Backend development" },
@@ -254,20 +237,34 @@ useEffect(() => {
     { name: "GraphQL", color: "bg-pink-500", icon: "📊", years: 1, description: "Modern API queries" }
   ];
   
-  // Optimized particles generation with more variety
-  const particles = useMemo(() => (
-    Array.from({ length: 35 }).map((_, i) => ({ // Increased particle count
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: 1 + Math.random() * 4,
-      opacity: 0.3 + Math.random() * 0.5,
-      duration: 15 + Math.random() * 40,
-      delay: Math.random() * 5
-    }))
-  ), [])
+  // Deterministic particles generation to prevent hydration mismatch
+  const [particles, setParticles] = useState([])
+  
+  useEffect(() => {
+    // Generate particles only on client side to prevent hydration mismatch
+    const generatedParticles = Array.from({ length: 35 }).map((_, i) => {
+      // Use seed-based approach for consistent results
+      const seed = i * 17 + 42; // Simple seed generation
+      const pseudoRandom = (seed) => {
+        let x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+      };
+      
+      return {
+        id: i,
+        x: pseudoRandom(seed) * 100,
+        y: pseudoRandom(seed + 1) * 100,
+        size: 1 + pseudoRandom(seed + 2) * 4,
+        opacity: 0.3 + pseudoRandom(seed + 3) * 0.5,
+        duration: 15 + pseudoRandom(seed + 4) * 40,
+        delay: pseudoRandom(seed + 5) * 5
+      };
+    });
+    
+    setParticles(generatedParticles);
+  }, [])
 
-  // Enhanced achievements with descriptions and animations
+  // Enhanced achievements
   const achievements = [
     { 
       icon: <Star className="h-4 w-4 text-yellow-500" />, 
@@ -295,16 +292,16 @@ useEffect(() => {
     }
   ]
 
-  // Added portfolio showcase projects with thumbnails
+  // Project preview
   const projectsPreview = [
     { name: "E-Commerce", tech: "MERN Stack", color: "from-blue-500 to-cyan-400" },
     { name: "AI Dashboard", tech: "Next.js + TensorFlow", color: "from-purple-500 to-pink-400" },
     { name: "Social Platform", tech: "React + Firebase", color: "from-orange-500 to-amber-400" }
   ]
 
-  // Experience years calculation with more precision
+  // Experience calculation
   const startYear = 2022;
-  const startMonth = 3; // March
+  const startMonth = 3;
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1;
@@ -322,7 +319,7 @@ useEffect(() => {
   return (
     <section 
       ref={containerRef} 
-      className="relative py-16 md:py-28 min-h-screen flex items-center overflow-hidden"
+      className="relative py-12 sm:py-16 md:py-20 lg:py-28 min-h-screen flex items-center overflow-hidden"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -339,12 +336,10 @@ useEffect(() => {
         <div className="absolute -inset-1 rounded-full bg-primary/20 animate-pulse"></div>
       </div>
       
-      {/* Improved Animated Background Elements */}
+      {/* Enhanced Animated Background Elements */}
       <div className="absolute inset-0 -z-10">
-        {/* Enhanced gradient backdrop */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/30 via-background to-background"></div>
         
-        {/* 3D animated mesh grid for depth */}
         <div className="absolute inset-0 bg-grid-white/[0.03] -z-10">
           <motion.div 
             className="absolute inset-0"
@@ -360,7 +355,7 @@ useEffect(() => {
           />
         </div>
         
-        {/* Enhanced animated circles with parallax effect */}
+        {/* Animated background elements */}
         <motion.div 
           className="absolute top-20 left-10 w-80 h-80 rounded-full bg-gradient-to-r from-primary/10 to-blue-500/5 backdrop-blur-3xl"
           animate={{ 
@@ -399,23 +394,7 @@ useEffect(() => {
           }}
         />
         
-        {/* Interactive pulse element that follows cursor */}
-        {/* <motion.div 
-  className="absolute w-[200px] h-[200px] rounded-full bg-primary/10 blur-3xl opacity-30 pointer-events-none"
-  animate={{ 
-    x: mousePosition.x * screenWidth,  // Calculated beforehand
-    y: mousePosition.y * screenHeight,
-    scale: [1, 1.2, 1],
-  }}
-  transition={{ 
-    x: { duration: 0.8, ease: "easeOut" },
-    y: { duration: 0.8, ease: "easeOut" },
-    scale: { duration: 3, repeat: Infinity }
-  }}
-/> */}
-
-        
-        {/* Enhanced decorative elements with pulse effect */}
+        {/* Additional decorative elements */}
         <motion.div 
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-tr from-primary/5 to-blue-500/5 opacity-30 blur-3xl"
           animate={{ 
@@ -430,7 +409,6 @@ useEffect(() => {
           }}
         />
         
-        {/* Responsive glow spots with enhanced effects */}
         <motion.div 
           className="absolute top-1/3 left-1/4 w-40 h-40 rounded-full bg-blue-400/15 blur-2xl"
           animate={{ 
@@ -454,8 +432,8 @@ useEffect(() => {
         />
       </div>
       
-      {/* Enhanced floating particles with varied motion paths and colors */}
-      {particles.map((particle, idx) => (
+      {/* Floating particles - only render when particles are loaded */}
+      {particles.length > 0 && particles.map((particle, idx) => (
         <motion.div
           key={particle.id}
           className={`absolute rounded-full ${idx % 5 === 0 ? 'bg-primary/40' : idx % 3 === 0 ? 'bg-blue-400/30' : 'bg-indigo-300/20'} blur-sm`}
@@ -469,14 +447,14 @@ useEffect(() => {
           initial={{ opacity: 0 }}
           animate={{
             x: [0, 
-               idx % 4 === 0 ? Math.random() * 120 - 60 : 
-               idx % 3 === 0 ? Math.random() * -80 + 40 : 
-               Math.random() * 100 - 50
+               idx % 4 === 0 ? (particle.x % 2 === 0 ? 60 : -60) : 
+               idx % 3 === 0 ? (particle.y % 2 === 0 ? -40 : 40) : 
+               (particle.x % 2 === 0 ? 50 : -50)
             ],
             y: [0, 
-               idx % 5 === 0 ? Math.random() * -120 + 60 : 
-               idx % 2 === 0 ? Math.random() * 80 - 40 : 
-               Math.random() * -100 + 50
+               idx % 5 === 0 ? (particle.y % 2 === 0 ? -60 : 60) : 
+               idx % 2 === 0 ? (particle.x % 2 === 0 ? -40 : 40) : 
+               (particle.y % 2 === 0 ? -50 : 50)
             ],
             opacity: [0, particle.opacity, 0],
             scale: idx % 3 === 0 ? [0, 1, 0] : undefined,
@@ -492,15 +470,16 @@ useEffect(() => {
         />
       ))}
       
-      <div className="container px-4 md:px-6 relative">
-        <div className="grid gap-6 lg:grid-cols-[1fr_450px] lg:gap-12 xl:grid-cols-[1fr_550px]">
+      {/* Main content container with improved margins */}
+      <div className="container mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 relative">
+        <div className="grid gap-8 lg:grid-cols-[1fr_450px] lg:gap-16 xl:grid-cols-[1fr_550px] xl:gap-20 items-center">
           <motion.div
-            className="flex flex-col justify-center space-y-6"
+            className="flex flex-col justify-center space-y-6 lg:space-y-8"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
           >
-            {/* Enhanced status indicator with interactive pulse animation */}
+            {/* Status indicator */}
             <motion.div 
               className="inline-flex space-x-2 items-center"
               variants={itemVariants}
@@ -542,9 +521,9 @@ useEffect(() => {
               </motion.div>
             </motion.div>
             
-            {/* Enhanced name animation section with improved typing and effects */}
+            {/* Name section */}
             <motion.div className="space-y-4" variants={itemVariants}>
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">
                 Hi, I'm <span className="relative">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500 relative">
                     {displayedName}
@@ -565,11 +544,11 @@ useEffect(() => {
                 </span>
               </h1>
               
-              {/* Enhanced role animation with 3D perspective transitions */}
+              {/* Role animation */}
               <div className="h-12 sm:h-12 overflow-hidden perspective-[1000px]">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    className="flex items-center text-xl sm:text-2xl text-muted-foreground font-light"
+                    className="flex items-center text-lg sm:text-xl md:text-2xl text-muted-foreground font-light"
                     key={currentRoleIndex}
                     initial={{ opacity: 0, y: 20, rotateX: -90 }}
                     animate={{ opacity: 1, y: 0, rotateX: 0 }}
@@ -610,9 +589,9 @@ useEffect(() => {
                 </AnimatePresence>
               </div>
               
-              {/* Enhanced description with animated highlight and text effects */}
+              {/* Description */}
               <motion.p
-                className="max-w-[600px] text-muted-foreground md:text-xl leading-relaxed"
+                className="max-w-[600px] text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed"
                 variants={itemVariants}
               >
                 Passionate about building
@@ -641,7 +620,7 @@ useEffect(() => {
               </motion.p>
             </motion.div>
             
-            {/* Interactive tech stack cards with advanced hover effects */}
+            {/* Tech stack */}
             <motion.div 
               className="flex flex-wrap gap-3"
               variants={itemVariants}
@@ -661,7 +640,6 @@ useEffect(() => {
                   onMouseEnter={() => setActiveTechIndex(index)}
                   onMouseLeave={() => setActiveTechIndex(null)}
                 >
-                  {/* Animated indicator dot */}
                   <motion.span 
                     className={`w-2 h-2 rounded-full ${tech.color} mr-2 group-hover:scale-150 transition-transform`}
                     animate={activeTechIndex === index ? {
@@ -671,324 +649,314 @@ useEffect(() => {
                     transition={{ duration: 1.5, repeat: Infinity }}
                   />
                   
-                  {/* Tech icon with bounce effect on active */}
                   <motion.span 
                     className="mr-1"
-                        animate={activeTechIndex === index ? {
-                          y: [0, -5, 0],
-                          scale: [1, 1.2, 1]
-                        } : {}}
-                        transition={{ duration: 0.5, repeat: activeTechIndex === index ? Infinity : 0 }}
-                      >
-                        {tech.icon}
-                      </motion.span>
-                      
-                      {tech.name}
-                      
-                      {/* Experience badge that shows on hover */}
-                      <motion.span 
-                        className="ml-1.5 opacity-0 group-hover:opacity-100 text-xs font-normal text-muted-foreground transition-opacity duration-200"
-                      >
-                        {tech.years}y
-                      </motion.span>
-                    </motion.div>
-                  ))}
-                </motion.div>
-                
-                {/* Experience badge with animated counter effect */}
-                <motion.div 
-                  className="flex items-center gap-4"
-                  variants={itemVariants}
-                >
-                  {showExperienceBadge && (
-                    <motion.div 
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-slate-100/80 to-slate-100/50 dark:from-slate-800/80 dark:to-slate-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50"
-                      initial={{ opacity: 0, scale: 0.8, x: -20 }}
-                      animate={{ opacity: 1, scale: 1, x: 0 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    >
-                      <Clock className="w-4 h-4 text-primary" />
-                      <span className="text-sm font-medium">
-                        <span className="text-primary">{experienceText}</span> Experience
-                      </span>
-                    </motion.div>
-                  )}
-                  
-                  {/* Achievement badges with micro-interactions */}
-                  <div className="flex flex-wrap gap-2">
-                    {achievements.map((achievement, i) => (
-                      <motion.div
-                        key={i}
-                        className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-gradient-to-r from-slate-100/60 to-slate-100/30 dark:from-slate-800/60 dark:to-slate-800/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 cursor-pointer group"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ delay: 1.5 + (i * 0.1) }}
-                        title={achievement.description}
-                      >
-                        <motion.div
-                          animate={achievement.animation}
-                          transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-                        >
-                          {achievement.icon}
-                        </motion.div>
-                        <span>{achievement.text}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-                
-                {/* Enhanced action button group with interactive animation effects */}
-                <motion.div 
-                  className="flex flex-col gap-4 sm:flex-row sm:gap-6"
-                  variants={itemVariants}
-                >
-                  <Button 
-                    className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 font-medium group relative overflow-hidden"
-                    size="lg"
-                    asChild
-                  >
-                    <Link href="#contact" className="gap-2">
-                      <motion.span 
-                        className="absolute -inset-full top-0 h-full w-1/2 z-5 block transform -translate-x-full bg-gradient-to-r from-white/20 to-transparent opacity-30 filter blur-sm group-hover:animate-[shimmer_1.5s_infinite]"
-                      />
-                      Contact Me
-                      <MessageCircle className="w-4 h-4" />
-                    </Link>
-                  </Button>
-                  
-                  <Button 
-                    className="relative bg-gradient-to-r from-background to-background hover:from-slate-50/5 hover:to-slate-900/5 border border-slate-200/10 dark:border-slate-700/30 hover:border-slate-300/30 dark:hover:border-slate-700/50 text-foreground shadow-sm hover:shadow-md shadow-slate-200/20 dark:shadow-slate-900/10 transition-all duration-300 group overflow-hidden"
-                    size="lg"
-                    asChild
-                    variant="outline"
-                  >
-                    <Link href="#projects" className="gap-2">
-                      <motion.span 
-                        className="absolute -inset-full top-0 h-full w-1/2 z-5 block transform -translate-x-full bg-gradient-to-r from-primary/10 to-transparent opacity-30 filter blur-sm group-hover:animate-[shimmer_1.5s_infinite]"
-                      />
-                      View Projects
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </Button>
-                  
-                  {/* Download resume button with bounce animation */}
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="group"
-                    asChild
-                  >
-                    <Link href="/IIT_Dhanbad_New.pdf" download>
-                      <motion.div
-                        whileHover={{ 
-                          scale: 1.2,
-                          rotate: [0, -5, 5, -5, 0],
-                          transition: { duration: 0.3 }
-                        }}
-                        className="text-muted-foreground group-hover:text-primary transition-colors"
-                      >
-                        <Download className="h-5 w-5" />
-                      </motion.div>
-                      <span className="sr-only">Download Resume</span>
-                    </Link>
-                  </Button>
-                </motion.div>
-                
-                {/* Social media links with enhanced animations */}
-                <motion.div 
-                  className="flex items-center gap-4"
-                  variants={itemVariants}
-                >
-                  {[
-                    { icon: <Github className="h-5 w-5" />, href: "https://github.com/Praveenkumar0001", label: "GitHub" },
-                    { icon: <Linkedin className="h-5 w-5" />, href: "https://www.linkedin.com/in/praveen-kumar-803838261/", label: "LinkedIn" },
-                    { icon: <Mail className="h-5 w-5" />, href: "mailto:22je0728@iitism.ac.in", label: "Email" },
-                    { icon: <Globe className="h-5 w-5" />, href: "https://my-portfolio-5c2s.vercel.app/", label: "Website" }
-                  ].map((social, i) => (
-                    <motion.a
-                      key={social.label}
-                      href={social.href}
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-slate-100/90 to-slate-100/60 dark:from-slate-800/90 dark:to-slate-800/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 text-muted-foreground hover:text-primary shadow-sm hover:shadow-md transition-all duration-300"
-                      custom={i}
-                      variants={socialIconVariants}
-                      whileHover="hover"
-                      aria-label={social.label}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {social.icon}
-                    </motion.a>
-                  ))}
-                </motion.div>
-                
-                {/* Scroll indicator with animated fade */}
-                {showScrollIndicator && (
-                  <motion.div 
-                    className="hidden sm:flex items-center mt-8 text-sm text-muted-foreground"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 2.5, duration: 0.6 }}
-                  >
-                    <ArrowDown className="mr-2 h-4 w-4 animate-bounce" />
-                    Scroll to explore
-                  </motion.div>
-                )}
-              </motion.div>
-              {/* <motion.div
-              className="absolute -right-4 top-1/3 bg-gray-900 shadow-lg px-4 py-2 rounded-xl border border-gray-800"
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 1.6, duration: 0.5 }}
-            >
-              <div className="text-center">
-                <span className="text-xl font-bold text-primary">2+</span>
-                <p className="text-xs text-gray-400">Years Experience</p>
-              </div>
-            </motion.div> */}
-              {/* Profile image section with 3D parallax effect */}
-              <motion.div 
-                className="relative flex justify-center"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-                ref={profileRef}
-                onMouseMove={(e) => {
-                  if (!profileRef.current) return
-                  
-                  const { left, top, width, height } = profileRef.current.getBoundingClientRect()
-                  const x = (e.clientX - left) / width - 0.5
-                  const y = (e.clientY - top) / height - 0.5
-                  
-                  mouseX.set(x)
-                  mouseY.set(y)
-                  
-                  setProfileHovered(true)
-                }}
-                onMouseLeave={() => {
-                  mouseX.set(0)
-                  mouseY.set(0)
-                  setProfileHovered(false)
-                }}
-              >
-                {/* 3D rotating card container */}
-                <motion.div
-                  className="relative w-[280px] md:w-[400px] aspect-[3/4] rounded-2xl shadow-2xl shadow-primary/10 overflow-hidden"
-                  style={{
-                    rotateX: tiltX,
-                    rotateY: tiltY,
-                    transformStyle: "preserve-3d",
-                    scale: profileImageScale,
-                    y: profileImageY,
-                    rotateZ: profileRotateZ
-                  }}
-                >
-                  {/* Enhanced glossy overlay effect */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 dark:from-white/10 dark:to-white/5 z-10 pointer-events-none"
-                    style={{
-                      background: `linear-gradient(105deg, 
-                        rgba(255,255,255,0) 0%, 
-                        rgba(255,255,255,0.12) 40%, 
-                        rgba(255,255,255,0.15) 50%, 
-                        rgba(255,255,255,0.12) 60%, 
-                        rgba(255,255,255,0) 100%)`,
-                      left: `calc(${glowX.get()}px)`,
-                      top: `calc(${glowY.get()}px)`,
-                      transform: 'translateX(-50%) translateY(-50%)',
-                      width: '150%',
-                      height: '150%',
-                      opacity: profileHovered ? 1 : 0.3,
-                      transition: 'opacity 0.3s ease-out'
-                    }}
-                  />
-                  
-                  {/* Profile image with parallax and loading effect */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-b from-primary/30 to-blue-500/30 mix-blend-overlay opacity-40 z-0"
-                    style={{ 
-                      transformStyle: "preserve-3d", 
-                      transform: "translateZ(-20px)" 
-                    }}
-                  />
-                  
-                  <div className="absolute inset-0 overflow-hidden">
-                    <motion.div 
-                      className="w-full h-full"
-                      style={{ 
-                        opacity: profileImageOpacity,
-                        transformStyle: "preserve-3d", 
-                        transform: "translateZ(20px)",
-                        x: useTransform(mouseX, [-0.5, 0.5], [-10, 10]),
-                        y: useTransform(mouseY, [-0.5, 0.5], [-10, 10]),
-                      }}
-                    >
-                      <div className="relative w-full h-full">
-                        {!imageLoaded && (
-                          <motion.div 
-                            className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse z-10"
-                            animate={{ opacity: imageLoaded ? 0 : 1 }}
-                            transition={{ duration: 0.5 }}
-                          />
-                        )}
-                        <Image 
-                          src="/images/praveen.jpg"
-                          alt="Praveen Kumar"
-                          fill
-                          className="object-cover rounded-60xl"
-                          onLoad={() => setImageLoaded(true)}
-                          style={{ 
-                            opacity: imageLoaded ? 1 : 0,
-                            transition: "opacity 0.5s ease-in-out"
-                          }}
-                        />
-                      </div>
-                    </motion.div>
-                  </div>
-                  
-                  {/* Enhanced border glow effect */}
-                  <motion.div 
-                    className="absolute inset-0 rounded-2xl border-2 border-white/10 z-20 pointer-events-none"
-                    animate={profileHovered ? { 
-                      boxShadow: ["0 0 0px rgba(99, 102, 241, 0)", "0 0 15px rgba(99, 102, 241, 0.5)", "0 0 0px rgba(99, 102, 241, 0)"] 
+                    animate={activeTechIndex === index ? {
+                      y: [0, -5, 0],
+                      scale: [1, 1.2, 1]
                     } : {}}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
+                    transition={{ duration: 0.5, repeat: activeTechIndex === index ? Infinity : 0 }}
+                  >
+                    {tech.icon}
+                  </motion.span>
                   
-                  {/* Project mini preview cards with hover animations */}
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-3">
-                    {projectsPreview.map((project, idx) => (
-                      <motion.div
-                        key={project.name}
-                        className={`w-16 h-16 rounded-xl overflow-hidden backdrop-blur-sm cursor-pointer relative group`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.5 + (idx * 0.2) }}
-                        whileHover={{ scale: 1.1, y: -5 }}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-80 group-hover:opacity-100 transition-opacity`}></div>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-white text-center p-1">
-                            <p className="text-xs font-bold leading-tight">{project.name}</p>
-                            <p className="text-[8px] opacity-80">{project.tech}</p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+                  {tech.name}
+                  
+                  <motion.span 
+                    className="ml-1.5 opacity-0 group-hover:opacity-100 text-xs font-normal text-muted-foreground transition-opacity duration-200"
+                  >
+                    {tech.years}y
+                  </motion.span>
                 </motion.div>
-                
-                {/* Experience badge floating element */}
-                <motion.div
-                  className="absolute top-4 -right-6 md:top-8 md:right-0 bg-white dark:bg-slate-800 shadow-lg rounded-full px-3 py-1 flex items-center gap-2 text-sm font-medium border border-slate-200 dark:border-slate-700 z-30"
+              ))}
+            </motion.div>
+            
+            {/* Experience and achievements */}
+            <motion.div 
+              className="flex flex-wrap items-center gap-4"
+              variants={itemVariants}
+            >
+              {showExperienceBadge && (
+                <motion.div 
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-slate-100/80 to-slate-100/50 dark:from-slate-800/80 dark:to-slate-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50"
                   initial={{ opacity: 0, scale: 0.8, x: -20 }}
                   animate={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{ delay: 1.2, type: "spring", stiffness: 300, damping: 15 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  <Calendar className="w-4 h-4 text-primary" />
-                  <span>Since <span className="text-primary">2022</span></span>
+                  <Clock className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium">
+                    <span className="text-primary">{experienceText}</span> Experience
+                  </span>
                 </motion.div>
-                <motion.div
+              )}
+              
+              {/* Achievement badges */}
+              <div className="flex flex-wrap gap-2">
+                {achievements.map((achievement, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-gradient-to-r from-slate-100/60 to-slate-100/30 dark:from-slate-800/60 dark:to-slate-800/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 cursor-pointer group"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ delay: 1.5 + (i * 0.1) }}
+                    title={achievement.description}
+                  >
+                    <motion.div
+                      animate={achievement.animation}
+                      transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                    >
+                      {achievement.icon}
+                    </motion.div>
+                    <span>{achievement.text}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+            
+            {/* Action buttons */}
+            <motion.div 
+              className="flex flex-col gap-4 sm:flex-row sm:gap-6"
+              variants={itemVariants}
+            >
+              <Button 
+                className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 font-medium group relative overflow-hidden"
+                size="lg"
+                asChild
+              >
+                <Link href="#contact" className="gap-2">
+                  <motion.span 
+                    className="absolute -inset-full top-0 h-full w-1/2 z-5 block transform -translate-x-full bg-gradient-to-r from-white/20 to-transparent opacity-30 filter blur-sm group-hover:animate-[shimmer_1.5s_infinite]"
+                  />
+                  Contact Me
+                  <MessageCircle className="w-4 h-4" />
+                </Link>
+              </Button>
+              
+              <Button 
+                className="relative bg-gradient-to-r from-background to-background hover:from-slate-50/5 hover:to-slate-900/5 border border-slate-200/10 dark:border-slate-700/30 hover:border-slate-300/30 dark:hover:border-slate-700/50 text-foreground shadow-sm hover:shadow-md shadow-slate-200/20 dark:shadow-slate-900/10 transition-all duration-300 group overflow-hidden"
+                size="lg"
+                asChild
+                variant="outline"
+              >
+                <Link href="#projects" className="gap-2">
+                  <motion.span 
+                    className="absolute -inset-full top-0 h-full w-1/2 z-5 block transform -translate-x-full bg-gradient-to-r from-primary/10 to-transparent opacity-30 filter blur-sm group-hover:animate-[shimmer_1.5s_infinite]"
+                  />
+                  View Projects
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+              
+              {/* Download resume button */}
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="group"
+                asChild
+              >
+                <Link href="/IIT_Dhanbad_New.pdf" download>
+                  <motion.div
+                    whileHover={{ 
+                      scale: 1.2,
+                      rotate: [0, -5, 5, -5, 0],
+                      transition: { duration: 0.3 }
+                    }}
+                    className="text-muted-foreground group-hover:text-primary transition-colors"
+                  >
+                    <Download className="h-5 w-5" />
+                  </motion.div>
+                  <span className="sr-only">Download Resume</span>
+                </Link>
+              </Button>
+            </motion.div>
+            
+            {/* Social media links */}
+            <motion.div 
+              className="flex items-center gap-4"
+              variants={itemVariants}
+            >
+              {[
+                { icon: <Github className="h-5 w-5" />, href: "https://github.com/Praveenkumar0001", label: "GitHub" },
+                { icon: <Linkedin className="h-5 w-5" />, href: "https://www.linkedin.com/in/praveen-kumar-803838261/", label: "LinkedIn" },
+                { icon: <Mail className="h-5 w-5" />, href: "mailto:22je0728@iitism.ac.in", label: "Email" },
+                { icon: <Globe className="h-5 w-5" />, href: "https://my-portfolio-5c2s.vercel.app/", label: "Website" }
+              ].map((social, i) => (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-slate-100/90 to-slate-100/60 dark:from-slate-800/90 dark:to-slate-800/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 text-muted-foreground hover:text-primary shadow-sm hover:shadow-md transition-all duration-300"
+                  custom={i}
+                  variants={socialIconVariants}
+                  whileHover="hover"
+                  aria-label={social.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
+            </motion.div>
+            
+            {/* Scroll indicator */}
+            {showScrollIndicator && (
+              <motion.div 
+                className="hidden sm:flex items-center mt-8 text-sm text-muted-foreground"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2.5, duration: 0.6 }}
+              >
+                <ArrowDown className="mr-2 h-4 w-4 animate-bounce" />
+                Scroll to explore
+              </motion.div>
+            )}
+          </motion.div>
+
+          {/* Profile image section */}
+          <motion.div 
+            className="relative flex justify-center lg:justify-end"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            ref={profileRef}
+            onMouseMove={(e) => {
+              if (!profileRef.current) return
+              
+              const { left, top, width, height } = profileRef.current.getBoundingClientRect()
+              const x = (e.clientX - left) / width - 0.5
+              const y = (e.clientY - top) / height - 0.5
+              
+              mouseX.set(x)
+              mouseY.set(y)
+              
+              setProfileHovered(true)
+            }}
+            onMouseLeave={() => {
+              mouseX.set(0)
+              mouseY.set(0)
+              setProfileHovered(false)
+            }}
+          >
+            {/* 3D rotating card container */}
+            <motion.div
+              className="relative w-[280px] md:w-[350px] lg:w-[400px] aspect-[3/4] rounded-2xl shadow-2xl shadow-primary/10 overflow-hidden"
+              style={{
+                rotateX: tiltX,
+                rotateY: tiltY,
+                transformStyle: "preserve-3d",
+                scale: profileImageScale,
+                y: profileImageY,
+                rotateZ: profileRotateZ
+              }}
+            >
+              {/* Glossy overlay effect */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 dark:from-white/10 dark:to-white/5 z-10 pointer-events-none"
+                style={{
+                  background: `linear-gradient(105deg, 
+                    rgba(255,255,255,0) 0%, 
+                    rgba(255,255,255,0.12) 40%, 
+                    rgba(255,255,255,0.15) 50%, 
+                    rgba(255,255,255,0.12) 60%, 
+                    rgba(255,255,255,0) 100%)`,
+                  left: `calc(${glowX.get()}px)`,
+                  top: `calc(${glowY.get()}px)`,
+                  transform: 'translateX(-50%) translateY(-50%)',
+                  width: '150%',
+                  height: '150%',
+                  opacity: profileHovered ? 1 : 0.3,
+                  transition: 'opacity 0.3s ease-out'
+                }}
+              />
+              
+              {/* Profile image overlay */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-b from-primary/30 to-blue-500/30 mix-blend-overlay opacity-40 z-0"
+                style={{ 
+                  transformStyle: "preserve-3d", 
+                  transform: "translateZ(-20px)" 
+                }}
+              />
+              
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div 
+                  className="w-full h-full"
+                  style={{ 
+                    opacity: profileImageOpacity,
+                    transformStyle: "preserve-3d", 
+                    transform: "translateZ(20px)",
+                    x: useTransform(mouseX, [-0.5, 0.5], [-10, 10]),
+                    y: useTransform(mouseY, [-0.5, 0.5], [-10, 10]),
+                  }}
+                >
+                  <div className="relative w-full h-full">
+                    {!imageLoaded && (
+                      <motion.div 
+                        className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse z-10"
+                        animate={{ opacity: imageLoaded ? 0 : 1 }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    )}
+                    <Image 
+                      src="/images/praveen.jpg"
+                      alt="Praveen Kumar"
+                      fill
+                      className="object-cover rounded-2xl"
+                      onLoad={() => setImageLoaded(true)}
+                      style={{ 
+                        opacity: imageLoaded ? 1 : 0,
+                        transition: "opacity 0.5s ease-in-out"
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              </div>
+              
+              {/* Border glow effect */}
+              <motion.div 
+                className="absolute inset-0 rounded-2xl border-2 border-white/10 z-20 pointer-events-none"
+                animate={profileHovered ? { 
+                  boxShadow: ["0 0 0px rgba(99, 102, 241, 0)", "0 0 15px rgba(99, 102, 241, 0.5)", "0 0 0px rgba(99, 102, 241, 0)"] 
+                } : {}}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              
+              {/* Project mini preview cards */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+                {projectsPreview.map((project, idx) => (
+                  <motion.div
+                    key={project.name}
+                    className={`w-16 h-16 rounded-xl overflow-hidden backdrop-blur-sm cursor-pointer relative group`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.5 + (idx * 0.2) }}
+                    whileHover={{ scale: 1.1, y: -5 }}
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-80 group-hover:opacity-100 transition-opacity`}></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-white text-center p-1">
+                        <p className="text-xs font-bold leading-tight">{project.name}</p>
+                        <p className="text-[8px] opacity-80">{project.tech}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+            
+            {/* Experience badge floating element */}
+            <motion.div
+              className="absolute top-4 -right-6 md:top-8 md:right-0 bg-white dark:bg-slate-800 shadow-lg rounded-full px-3 py-1 flex items-center gap-2 text-sm font-medium border border-slate-200 dark:border-slate-700 z-30"
+              initial={{ opacity: 0, scale: 0.8, x: -20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ delay: 1.2, type: "spring", stiffness: 300, damping: 15 }}
+            >
+              <Calendar className="w-4 h-4 text-primary" />
+              <span>Since <span className="text-primary">2022</span></span>
+            </motion.div>
+            
+            {/* Years experience badge */}
+            <motion.div
               className="absolute -right-4 top-1/3 bg-gray-900 shadow-lg px-4 py-2 rounded-xl border border-gray-800"
               initial={{ x: 100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -999,9 +967,9 @@ useEffect(() => {
                 <p className="text-xs text-gray-400">Years Experience</p>
               </div>
             </motion.div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-      )
-    }
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}

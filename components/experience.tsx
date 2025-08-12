@@ -66,7 +66,7 @@ export function Experience() {
       id="experience"
       className="py-24 md:py-32 bg-gradient-to-b from-[#f8fafc] via-muted/30 to-[#e2e8f0] dark:from-[#0f172a] dark:to-[#1e293b] relative z-0"
     >
-      <div className="container px-4 md:px-6 relative z-10">
+      <div className="container mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 relative z-10">
         <motion.div
           ref={ref}
           initial="hidden"
@@ -87,8 +87,8 @@ export function Experience() {
           </motion.div>
         </motion.div>
   
-        <div className="mx-auto max-w-3xl pt-20 relative">
-          <div className="absolute top-0 left-5 w-1 h-full bg-gradient-to-b from-primary to-transparent opacity-30 rounded-full"></div>
+        <div className="mx-auto max-w-4xl pt-20 relative px-4 sm:px-6">
+          <div className="absolute top-0 left-5 sm:left-9 w-1 h-full bg-gradient-to-b from-primary to-transparent opacity-30 rounded-full"></div>
   
           {experiences.map((experience, index) => (
             <motion.div
@@ -97,10 +97,10 @@ export function Experience() {
               initial="hidden"
               animate={controls}
               transition={{ delay: index * 0.2 }}
-              className="relative pl-16 mb-20 group"
+              className="relative pl-12 sm:pl-16 pr-4 sm:pr-6 mb-16 sm:mb-20 group"
             >
               {/* Timeline Dot */}
-              <div className="absolute left-0 top-4 h-10 w-10 rounded-full bg-background border-4 border-primary shadow-xl flex items-center justify-center transition-all group-hover:scale-105 group-hover:shadow-primary/40">
+              <div className="absolute left-0 sm:left-4 top-4 h-10 w-10 rounded-full bg-background border-4 border-primary shadow-xl flex items-center justify-center transition-all group-hover:scale-105 group-hover:shadow-primary/40">
                 <Briefcase className="h-5 w-5 text-primary" />
               </div>
   
@@ -108,9 +108,10 @@ export function Experience() {
               <motion.div
                 whileHover={{ scale: 1.03, rotateX: 2, rotateY: 2 }}
                 transition={{ type: "spring", stiffness: 200 }}
+                className="w-full"
               >
                 <Card className="bg-white/70 dark:bg-slate-900/80 border border-border backdrop-blur-md shadow-xl rounded-3xl overflow-hidden transition-all hover:shadow-2xl hover:border-primary/30">
-                  <CardHeader>
+                  <CardHeader className="px-6 sm:px-8">
                     <CardTitle className="text-xl font-bold text-foreground">
                       {experience.title}
                     </CardTitle>
@@ -126,7 +127,7 @@ export function Experience() {
                       </div>
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 px-6 sm:px-8 pb-6 sm:pb-8">
                     <p className="text-muted-foreground leading-relaxed">{experience.description}</p>
                     <div className="flex flex-wrap gap-2">
                       {experience.technologies.map((tech, techIndex) => (

@@ -268,7 +268,8 @@ export function Contact() {
         <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full bg-primary/5 blur-3xl"></div>
       </div>
       
-      <div className="container px-4 md:px-6">
+      {/* Enhanced container with proper left and right margins */}
+      <div className="container mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 max-w-7xl">
         <motion.div
           ref={ref}
           initial="hidden"
@@ -286,7 +287,7 @@ export function Contact() {
             </motion.div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Get In Touch</h2>
             <motion.p 
-              className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed"
+              className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed px-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
@@ -300,7 +301,7 @@ export function Contact() {
           variants={containerVariants}
           initial="hidden"
           animate={controls}
-          className="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-2"
+          className="mx-auto grid max-w-6xl gap-8 py-12 lg:grid-cols-2 lg:gap-12"
         >
           <motion.div variants={itemVariants} className="space-y-6">
             <Card className="bg-card/50 backdrop-blur transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
@@ -312,16 +313,16 @@ export function Contact() {
                 {contactMethods.map((method, index) => (
                   <motion.div
                     key={index}
-                    className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-300 ${activeContact === index ? 'bg-primary/10' : 'hover:bg-primary/5'}`}
+                    className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-300 cursor-pointer ${activeContact === index ? 'bg-primary/10' : 'hover:bg-primary/5'}`}
                     whileHover={{ x: 5 }}
                     onClick={() => setActiveContact(index === activeContact ? null : index)}
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                       {method.icon}
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <p className="font-medium">{method.title}</p>
-                      <p className="text-sm text-muted-foreground">{method.value}</p>
+                      <p className="text-sm text-muted-foreground truncate">{method.value}</p>
                     </div>
                     <AnimatePresence>
                       {activeContact === index && (
@@ -335,7 +336,10 @@ export function Contact() {
                             size="sm" 
                             variant="secondary"
                             className="text-xs"
-                            onClick={method.onClick}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              method.onClick()
+                            }}
                           >
                             {method.action}
                             <ChevronRight className="ml-1 h-3 w-3" />
@@ -400,7 +404,7 @@ export function Contact() {
                       <Check className="h-8 w-8" />
                     </div>
                     <h3 className="text-xl font-medium">Thank you!</h3>
-                    <p className="text-center text-muted-foreground">
+                    <p className="text-center text-muted-foreground px-4">
                       Your message has been sent successfully. I'll get back to you as soon as possible.
                     </p>
                     <Button onClick={resetForm} className="mt-4">
@@ -408,7 +412,7 @@ export function Contact() {
                     </Button>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-4">
                     <AnimatePresence mode="wait" custom={formStep}>
                       {formStep === 0 && (
                         <motion.div
@@ -597,7 +601,7 @@ export function Contact() {
                         />
                       ))}
                     </div>
-                  </form>
+                  </div>
                 )}
               </CardContent>
             </Card>
