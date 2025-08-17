@@ -124,12 +124,12 @@ export function Skills() {
   // Get experience years (fictional data for demo)
   const getExperienceYears = (skill) => {
     const experienceMap = {
-      "HTML5/CSS3": 7, "JavaScript": 6, "React": 4, "Next.js": 2, "Tailwind CSS": 3, "TypeScript": 2,
-      "Node.js": 4, "Express": 3, "C/C++": 8, "RESTful APIs": 5, "JWT": 3, "Authentication": 4,
-      "MongoDB": 4, "PostgreSQL": 2, "MySQL": 5, "Mongoose": 3, "SQL": 5, "NoSQL": 4,
-      "Data Structures": 8, "Algorithms": 7, "OOP": 6, "Competitive Programming": 5, "Problem Solving": 8, "Git & GitHub": 5,
-      "VS Code": 5, "Postman": 4, "Apache JMeter": 2, "Katalon Studio": 1, "API Testing": 3, "Performance Testing": 2,
-      "Teamwork": 8, "Leadership": 6, "Communication": 7, "Creative Thinking": 8, "Analytical Skills": 7, "Adaptiveness": 8
+      "HTML5/CSS3": 3, "JavaScript": 3, "React": 3, "Next.js": 2, "Tailwind CSS": 3, "TypeScript": 2,
+      "Node.js": 3, "Express": 3, "C/C++": 3, "RESTful APIs": 2, "JWT": 3, "Authentication": 3,
+      "MongoDB": 3, "PostgreSQL": 2, "MySQL": 2, "Mongoose": 3, "SQL": 3, "NoSQL": 4,
+      "Data Structures": 2, "Algorithms": 2, "OOP": 1, "Competitive Programming": 5, "Problem Solving": 3, "Git & GitHub": 3,
+      "VS Code": 4, "Postman": 3, "Apache JMeter": 2, "Katalon Studio": 1, "API Testing": 3, "Performance Testing": 2,
+      "Teamwork": 5, "Leadership": 5, "Communication": 5, "Creative Thinking": 5, "Analytical Skills": 5, "Adaptiveness": 4
     }
     
     return experienceMap[skill] || Math.floor(Math.random() * 5) + 2 // Fallback 2-7 years
