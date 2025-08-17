@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
 import { Experience } from "@/components/experience"
 import { Education } from "@/components/education"
+// import { Responsibilities} from "@/components/achievements"
 import { Responsibilities } from "@/components/responsibilities"
 // import { ScrollToTop } from "@/components/scroll-to-top"
 import { CustomCursor } from "@/components/custom-cursor"
@@ -23,6 +24,7 @@ export default function Home() {
         <Skills />
         <Experience />
         <Projects />
+        {/* <Achievements/> */}
         <Responsibilities />
         <Contact />
       </main>

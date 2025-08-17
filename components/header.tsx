@@ -278,7 +278,7 @@ export function Header() {
     { href: "#skills", label: "Skills", icon: Code, color: "from-purple-500 via-violet-400 to-purple-600" },
     { href: "#experience", label: "Experience", icon: Briefcase, color: "from-orange-500 via-amber-400 to-red-500" },
     { href: "#projects", label: "Projects", icon: Layout, color: "from-pink-500 via-rose-400 to-pink-600" },
-    { href: "#achievements", label: "Achievements", icon: Award, color: "from-yellow-500 via-amber-400 to-orange-500" },
+    { href: "#responsibilities", label: "Achievements", icon: Award, color: "from-yellow-500 via-amber-400 to-orange-500" },
     { href: "#contact", label: "Contact", icon: Mail, color: "from-indigo-500 via-purple-400 to-indigo-600" },
   ];
 
@@ -803,12 +803,12 @@ export function Header() {
         } shadow-2xl aurora-glowing`}>
           
           {/* Enhanced progress section */}
-          <div className="flex items-center space-x-3">
+          {/* <div className="flex items-center space-x-3">
             <div className="w-2 h-2 bg-green-400 rounded-full magical-pulsing"></div>
             <span className={`text-sm font-bold premium-text-gradient`}>
               Navigation System
             </span>
-          </div>
+          </div> */}
 
           {/* Enhanced navigation dots */}
           <div className="flex items-center space-x-3">
