@@ -755,7 +755,7 @@ export function Hero() {
                 className="group"
                 asChild
               >
-                <Link href="/IIT_Dhanbad-N.pdf" download>
+                <Link href="/images/Resume_N.pdf" download>
                   <motion.div
                     whileHover={{ 
                       scale: 1.2,
